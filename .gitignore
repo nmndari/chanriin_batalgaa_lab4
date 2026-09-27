@@ -5,3 +5,4 @@ target/
 # override global ignore rules
 !.gitignore
 !pom.xml
+!**/.mvn/settings.xml

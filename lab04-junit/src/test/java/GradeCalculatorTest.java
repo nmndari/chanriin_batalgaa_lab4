@@ -85,6 +85,17 @@ class GradeCalculatorTest {
         assertEquals(expected, grade); // Assert
     }
 
+    @ParameterizedTest(name = "{0} оноо -> {1}")
+    @CsvSource({"95,A", "90,A", "89.99,B", "80,B", "70,C", "60,D", "59.99,F", "0,F"})
+    @DisplayName("Бүх дүнгийн хязгаар дээр letterGrade зөв ажиллах ёстой (parameterized)")
+    void letterGradeBoundaries(double score, String expected) {
+        GradeCalculator calc = new GradeCalculator(); // Arrange
+
+        String grade = calc.letterGrade(score); // Act
+
+        assertEquals(expected, grade); // Assert
+    }
+
     // ---------- letterGrade: буруу оролт ----------
 
     @ParameterizedTest(name = "{0} оноо -> IllegalArgumentException")
@@ -117,6 +128,25 @@ class GradeCalculatorTest {
         double total = calc.totalScore(8, 32.5, 7, 9, 21); // Act
 
         assertEquals(77.5, total, 1e-9); // Assert
+    }
+
+    @ParameterizedTest(name = "att={0}, lab={1}, quiz1={2}, quiz2={3}, exam={4} -> {5}")
+    @CsvSource({
+        "10, 40, 10, 10, 30, 100",
+        "0,  0,  0,  0,  0,  0",
+        "8,  32.5, 7, 9, 21, 77.5",
+        "5,  20, 5,  5,  15, 50",
+        "10, 0,  0,  0,  0,  10",
+        "0,  0,  0,  0,  30, 30"
+    })
+    @DisplayName("Хязгаар доторх оноонуудын нийлбэр зөв гарах ёстой (parameterized)")
+    void totalScoreSumsCorrectly(double att, double lab, double quiz1, double quiz2, double exam,
+                                 double expected) {
+        GradeCalculator calc = new GradeCalculator(); // Arrange
+
+        double total = calc.totalScore(att, lab, quiz1, quiz2, exam); // Act
+
+        assertEquals(expected, total, 1e-9); // Assert
     }
 
     @Test
