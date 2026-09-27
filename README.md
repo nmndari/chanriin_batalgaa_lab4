@@ -50,3 +50,32 @@ BUILD SUCCESS
 | `letterGrade` буруу оролт (`assertThrows`) | -1, 101, -0.01, 100.01, NaN |
 | `totalScore` зөв нийлбэр | (10, 40, 10, 10, 30)→100, (8, 32.5, 7, 9, 21)→77.5 |
 | `totalScore` буруу оролт (`assertThrows`) | att = -5, lab = 41, мөн хэсэг бүрийн сөрөг болон дээд хязгаараас хэтэрсэн утга |
+
+## Мутаци (санаатай унагаах)
+
+`GradeCalculator.letterGrade` доторх `score >= 90` нөхцөлийг зориуд `score > 90` болгож ажиллуулсан:
+
+```bash
+mvn test 2>&1 | tee results/mvn-test-mutant.txt
+```
+
+Үр дүн ([`lab04-junit/results/mvn-test-mutant.txt`](lab04-junit/results/mvn-test-mutant.txt)):
+```
+Tests run: 40, Failures: 2, Errors: 0, Skipped: 0
+BUILD FAILURE
+```
+
+Унасан тестүүд:
+
+| Тест | Мэдээлэл |
+|---|---|
+| `ninetyIsExactlyA` — "90 оноо яг A дүн байх ёстой (хязгаарын тохиолдол)" | `expected: <A> but was: <B>` |
+| `letterGradeBoundaries[2]` — `90 оноо -> A` мөр | `expected: <A> but was: <B>` |
+
+90 оноо яг хязгаар дээр байгаа тул `>` болгоход A биш B буцаасан бөгөөд хязгаарын утгыг шалгадаг тестүүд үүнийг илрүүлсэн. 95, 100 зэрэг 90-ээс дээш утгатай тестүүд pass хэвээр байсан нь зөвхөн ердийн утгаар тестлэх нь хангалтгүйг харуулж байна.
+
+Дараа нь `>= 90`-ийг буцааж засаад `mvn test`-ийг дахин ажиллууллсан. (`Tests run: 40, Failures: 0`, `BUILD SUCCESS`).
+
+## Дүгнэлт
+
+`GradeCalculatorTest` класст нийт **14** тестийн метод (`@Test` болон `@ParameterizedTest`) бичсэн бөгөөд `results/mvn-test.txt`-д `Tests run: 40, Failures: 0, Errors: 0, Skipped: 0` гэж гарсан, учир нь Surefire `@CsvSource` / `@ValueSource`-ийн мөр бүрийг тусдаа тест гэж тоолдог. Мутацийн үед `letterGrade` доторх `score >= 90`-ийг `score > 90` болгоход `ninetyIsExactlyA` болон `letterGradeBoundaries`-ийн `90 -> A` мөр гэсэн хоёр тест `expected: <A> but was: <B>` мэдээлэлтэй унаж, `BUILD FAILURE` гарсан. Үүний дараа нөхцөлийг `>= 90` болгож буцаан засаад `mvn test`-ийг дахин ажиллуулж, бүх тест ногоон болсныг `results/mvn-test.txt`-д хадгалсан. Хамгийн сонирхолтой нь мутацийн үед 40 тестээс зөвхөн **2** нь унасан явдал: 95→A, 100→A тестүүд pass хэвээр байсан, учир нь `>` ба `>=` зөвхөн яг 90 дээр л ялгаатай. Хэрэв би 90 оноог тусад нь тестлээгүй бол энэ алдаа огт илрэхгүй байсан.
