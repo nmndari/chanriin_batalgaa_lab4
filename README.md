@@ -79,3 +79,12 @@ BUILD FAILURE
 ## Дүгнэлт
 
 `GradeCalculatorTest` класст нийт **14** тестийн метод (`@Test` болон `@ParameterizedTest`) бичсэн бөгөөд `results/mvn-test.txt`-д `Tests run: 40, Failures: 0, Errors: 0, Skipped: 0` гэж гарсан, учир нь Surefire `@CsvSource` / `@ValueSource`-ийн мөр бүрийг тусдаа тест гэж тоолдог. Мутацийн үед `letterGrade` доторх `score >= 90`-ийг `score > 90` болгоход `ninetyIsExactlyA` болон `letterGradeBoundaries`-ийн `90 -> A` мөр гэсэн хоёр тест `expected: <A> but was: <B>` мэдээлэлтэй унаж, `BUILD FAILURE` гарсан. Үүний дараа нөхцөлийг `>= 90` болгож буцаан засаад `mvn test`-ийг дахин ажиллуулж, бүх тест ногоон болсныг `results/mvn-test.txt`-д хадгалсан. Хамгийн сонирхолтой нь мутацийн үед 40 тестээс зөвхөн **2** нь унасан явдал: 95→A, 100→A тестүүд pass хэвээр байсан, учир нь `>` ба `>=` зөвхөн яг 90 дээр л ялгаатай. Хэрэв би 90 оноог тусад нь тестлээгүй бол энэ алдаа огт илрэхгүй байсан.
+
+## Нэмэлт даалгавар - AI-ийн тесттэй харьцуулалт
+
+- AI тест: [`lab04-junit/ai-tests/GradeCalculatorAiTest.java`](lab04-junit/ai-tests/GradeCalculatorAiTest.java)
+- Харьцуулалт: [`lab04-junit/ai-tests/mutation-comparison.txt`](lab04-junit/ai-tests/mutation-comparison.txt)
+- AI тестийн үр дүн: [`lab04-junit/results/mvn-test-ai.txt`](lab04-junit/results/mvn-test-ai.txt) — `Tests run: 49, Failures: 0, Errors: 0, Skipped: 0`, `BUILD SUCCESS`
+
+(1) Хоёр тестийн suite-ийг ижил 12 мутацид ажиллуулахад AI миний мартсан totalScore дахь NaN шалгалтыг санаж, мөн 79.99, 69.99, ±Infinity, 0.01 болон exception message-ийг зөв шалгасан.
+(2) AI шаардлагатай 90, 89.99, 60, 59.99, 0, 100 гэсэн хязгаарын утгуудыг бүгдийг тестэлсэн. Гэхдээ `totalScoreFeedsLetterGrade` тест нь 94 ба 50 гэсэн утга ашигласан тул яг 90 болох тохиолдлыг шалгаж чадаагүй. Мөн AI зөвхөн 2 `@DisplayName` ашигласан бөгөөд хичээлийн шаардлага болох Arrange–Act–Assert бүтэц огт байхгүй. (3) Хамгийн чанартай тест нь `throwsWhenAnyComponentIsNaN` болон хязгаарын утгуудыг шалгасан хүснэгт байсан. Харин зарим тестүүд allMaxGivesHundred-ийн шалгасныг давтаж, шинэ мутаци илрүүлээгүй. — мөр олон байсан ч мутаци бүрийг contains("150") зэрэг message-ийн тестүүд нь мессеж бага зэрэг өөрчлөгдөхөд эмзэг байна. Ерөнхийдөө AI нь олон төрлийн оролт санал болгоход тустай ч давхардсан тест бичих хандлагатай тул үүсгэсэн тестүүдийг шүүж, хэрэгтэй хэсгийг өөрийн тестэд ашиглах нь зөв.

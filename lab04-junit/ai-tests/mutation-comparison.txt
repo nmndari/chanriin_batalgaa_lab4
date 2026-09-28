@@ -1,0 +1,18 @@
+Миний тест (src/test) ба AI тест (ai-tests) хоёрыг ижил 12 мутацид ажиллуулсан үр дүн.
+killed(N) = N тест унасан (мутацийг илрүүлсэн), survived = нэг ч тест унаагүй.
+
+Mutation                           Mine       AI        
+M1  >=90 -> >90                    killed(2)  killed(1) 
+M2  >=80 -> >80                    killed(1)  killed(1) 
+M3  >=70 -> >70                    killed(1)  killed(1) 
+M4  >=60 -> >60                    killed(2)  killed(1) 
+M5  score>100 -> score>=100        killed(1)  killed(1) 
+M6  score<0 -> score<=0            killed(2)  killed(1) 
+M7  value>max -> value>=max        killed(4)  killed(4) 
+M8  value<0 -> value<=0            killed(3)  killed(3) 
+M9  letterGrade NaN check removed  killed(1)  killed(1) 
+M10 checkRange NaN check removed   survived   killed(1) 
+M11 lab max 40 -> 30               killed(4)  killed(5) 
+M12 sum: quiz2 -> quiz1            killed(2)  killed(2) 
+mine original: [INFO] Tests run: 40, Failures: 0, Errors: 0, Skipped: 0 [INFO] BUILD SUCCESS 
+ai original: [INFO] Tests run: 49, Failures: 0, Errors: 0, Skipped: 0 [INFO] BUILD SUCCESS 
